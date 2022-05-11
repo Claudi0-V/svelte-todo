@@ -2,20 +2,20 @@
 	export interface Todo {
 		title:string, 
 		description: string, 
+		priority: string,
 		dueDate: string, 
-		priority: string
 	}
 
 </script>
 
 <script lang="ts">
 	
-
 	export class NewTodo implements Todo {
 		constructor(public title:string, 
 					public description: string = '', 
-					public dueDate: string, 
-					public priority: string){
+					public priority: string,
+					public dueDate: string = new Date().toJSON(), 
+					){
 		}
 	}
 </script>
