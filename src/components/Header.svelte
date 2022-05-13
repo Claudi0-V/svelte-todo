@@ -1,9 +1,19 @@
 <script lang="ts">
+	import type { TodoProject } from './classes/NewProject.svelte';
+	import type { Todo } from './classes/NewTodo.svelte';
 	import Modal from './Modal.svelte'
-	let isModalOpen: boolean = false;
+
+	export let globalFolder: TodoProject[];
+	export let folderList: string[];
+	let isModalOpen: boolean = true;
 	
-	
-	const toggleModal = () => isModalOpen = !isModalOpen;
+	const toggleModal = ():void => {isModalOpen = !isModalOpen};
+	const submitFormHandler = (todo: Todo, folderName: string): void => {
+		const folderIndex = globalFolder.findIndex(folder => folder.name === folderName);
+		globalFolder[folderIndex].items.push(todo);
+		globalFolder = globalFolder;
+	}
+
 
 </script>
 
@@ -12,9 +22,5 @@
 	<button on:click={toggleModal}>
 		Add New todo
 	</button>
-	{#if isModalOpen}
-		<Modal {isModalOpen}>
-			<h1>test</h1>
-		</Modal>
-	{/if}
+	<Modal {isModalOpen} {toggleModal} {submitFormHandler}  {folderList}/>
 </header>

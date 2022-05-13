@@ -4,18 +4,19 @@
 		description: string, 
 		priority: string,
 		dueDate: string, 
+		id: string,
 	}
 
-</script>
-
-<script lang="ts">
+	import { idGenerator } from '../utils';
 	
 	export class NewTodo implements Todo {
 		constructor(public title:string, 
 					public description: string = '', 
-					public priority: string,
-					public dueDate: string = new Date().toJSON(), 
+					public priority: string = 'low',
+					public dueDate: string = new Date().toJSON(),
+					public id: string = idGenerator(),
 					){
 		}
 	}
+
 </script>
