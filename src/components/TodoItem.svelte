@@ -1,58 +1,71 @@
 <script lang="ts">
+	import Fa from 'svelte-fa'
+  	import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+
 	import type { TodoProject } from "./classes/NewProject.svelte";
 	import type { Todo } from "./classes/NewTodo.svelte";
+	import EditModal from "./EditModal.svelte";
 
 	export let todo: Todo;
 	export let folder: TodoProject;	
 	export let removeTodo;
+	export let folderList;
+
 
 	let curr = new Date(todo.dueDate).toJSON();
  	$: date = curr.split('T')[0];
 
-	let disabled: boolean = true;
+
+	let isModalOpen: boolean = false;
+
+
 </script>
 
-<li>
-	<input 	type="text" 
-			bind:value={todo.title} 
-			min="5" max="20"
-			{disabled} />
-	<textarea 	bind:value={todo.description} 
-				min="10" max="100"
-				{disabled}></textarea>
-	<select bind:value={todo.priority} name="priority" {disabled}>
-		<option value='high'>High</option>
-		<option value='medium'>Medium</option>
-		<option value='low'>Low</option>
-	</select>
-
-	<input 	type="date" 
-				name="date"
-				id="date"
-				bind:value={date}
-				{disabled} 
-          		on:change={() => todo.dueDate = new Date(date).toJSON()}
-        >
-
-	<div class="todo-button__container">
-		<button on:click={() => disabled = !disabled} >
-			{disabled ? 'edit' : 'save'}
-		</button>
-		<button on:click={() => removeTodo(folder.name,todo.id)}>remove</button>
+<li class="todo-info">
+	<input type=checkbox checked={todo.checked} >
+	<div class="description" on:click={() => isModalOpen = true }>
+		<h3><span>Title:</span> {todo.title}</h3>
+		<p>{todo.description}</p>	
 	</div>
+	<button class="remove-button" on:click={() => removeTodo(folder.name,todo.id)}>
+		<Fa icon={faTrashCan} />
+	</button>
+
+	
 </li>
+{#if isModalOpen}
+	<EditModal bind:isModalOpen bind:todo {folderList} />
+{/if}
 
 <style>
-	input, textarea, select{
-		display:  block;
-		resize: none;
+	.todo-info {
+		display: flex;
+    	width: 270px;
+	    justify-content: space-between;
+	    align-items: center;
+	    padding: 0px 15px;
+	    box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+	    border-radius:  5px;
+	    text-align: center;
 	}
-
-	input:disabled, textarea:disabled, select:disabled {
-		background-color: white;
-		color:  black;
-		font-weight: 600;
-		border: none;
+	.todo-info:hover, .todo-info:active {
+    	box-shadow: rgb(60 64 67 / 30%) 0px 1px 5px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+	}
+	.todo-info h3 {
+		margin: 5px;
+	}
+	.todo-info p {
+		margin: 5px;
+	}	
+	.remove-button {
+		background-color: transparent;
 		outline: none;
+		border: none;
+	}
+	.remove-button:hover {
+		color: red;
+	}
+	.description {
+		cursor: pointer;
 	}
 </style>

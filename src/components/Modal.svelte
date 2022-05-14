@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { NewTodo } from "./classes/NewTodo.svelte";
+	import CloseButton from "./CloseButton.svelte";
 
 	export let toggleModal = ():void => {};
 	export let submitFormHandler;
@@ -11,22 +12,23 @@
 	let curr = new Date().toJSON();
  	$: date = curr.split('T')[0];
 
- 	let tempTodo = new NewTodo(''); 
+ 	export let tempTodo = new NewTodo(''); 
  	let folder: string = folderList[0];
- 	$: {
- 		console.log(folder)
- 	}
+
+ 	export let disabled = false;
 
 </script>
 
 <div class="modal-container" style="--display: {openStyle};">
 	<form class="modal" on:submit|preventDefault={() => submitFormHandler(tempTodo, folder)}> 
+		<CloseButton toggle={toggleModal} />
 		<label for="title" id="title-label">Title</label>
 		<input 	type="text" 
 				id="title" 
 				bind:value={tempTodo.title} 
 				placeholder="Do stuff..." 
 				required 
+				{disabled}
 				min="5" max="20">
 
 		<label for="description" id="description-label">Description</label>
@@ -37,12 +39,14 @@
 					bind:value={tempTodo.description} 
 					placeholder="say something about the todo..."
 					required
+					{disabled}
 					min="10" max="100"></textarea>
 
 		<label for="priority" id="priority-label">Priority</label>
 		<select bind:value={tempTodo.priority} 
 				name="priority" 
 				id="priority" 
+				{disabled}
 				required>
 			<option value='high'>High</option>
 			<option value='medium'>Medium</option>
@@ -53,6 +57,7 @@
 		<select bind:value={folder} 
 				name="priority" 
 				id="priority" 
+				{disabled}
 				required>
 			
 			{#each folderList as folder}
@@ -66,6 +71,7 @@
 				id="date"
 				bind:value={date} 
           		on:change={() => tempTodo.dueDate = new Date(date).toJSON()}
+          		{disabled}
         >
         <button class="new-todo__button" on:click={toggleModal}>
         	Save
@@ -97,5 +103,8 @@
 		padding:  10px;
 		margin: 5px;
 		border-radius: 5px;
+	}
+	label {
+		margin-bottom:  5px;
 	}
 </style>

@@ -4,6 +4,7 @@
 		description: string, 
 		priority: string,
 		dueDate: string, 
+		checked: boolean,
 		id: string,
 	}
 
@@ -14,6 +15,7 @@
 					public description: string = '', 
 					public priority: string = 'low',
 					public dueDate: string = new Date().toJSON(),
+					public checked: boolean = false,
 					public id: string = idGenerator(),
 					){
 		}
